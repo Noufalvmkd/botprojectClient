@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App.jsx'
-import Home from './pages/Home.jsx'
+import Home from './pages/user/Home.jsx'
 import Userheader from './components/Userheader.jsx'
 
 
@@ -14,6 +14,8 @@ import {
 } from "react-router-dom";
 import Userroot from './layouts/Userroot.jsx';
 import AdminRoot from './layouts/AdminRoot.jsx';
+import Register from './pages/shared/Register.jsx';
+import Login from './pages/shared/Login.jsx';
 
 const router = createBrowserRouter([
   {
@@ -22,10 +24,14 @@ const router = createBrowserRouter([
     children : [
       {path: "",
     element: <Home />} ,
-  //     {
-  //   path: "/produt-details/:id",
-  //   element: <Details />,
-  // }
+      {
+    path: "/login",
+    element: <Login />,
+  },
+    {
+    path: "/register",
+    element: <Register />,
+  }
     ]
   },
   {path: "/admin",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProductCard from '../components/ProductCards';
+import ProductCard from '../../components/ProductCards';
 import { Container, Row, Col } from 'react-bootstrap';
 
 const Home = () => {
