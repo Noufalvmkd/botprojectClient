@@ -30,7 +30,7 @@ const Register = () => {
       setMessage('Registration successful ✅');
       setFormData({ email: '', password: '', phone: '', role: 'user', status: 'active', profile_pic: '' });
     } catch (err) {
-      setMessage('Registration failed ❌');
+      setMessage('Registration failed');
     }
   };
 
