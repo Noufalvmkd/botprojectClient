@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '../../components/ProductCards';
 import { Container, Row, Col } from 'react-bootstrap';
+import CarouselComponent from '../../components/user/CarouselComponent';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -21,6 +22,10 @@ const Home = () => {
   }, []);
 
   return (
+    <>
+    <div style={{ paddingTop: "70px" }}>
+    <CarouselComponent />
+   
     <Container className="my-4">
       <h2 className="mb-4">Featured Products</h2>
       <Row>
@@ -31,6 +36,9 @@ const Home = () => {
         ))}
       </Row>
     </Container>
+    </div>
+     </>
+
   );
 };
 

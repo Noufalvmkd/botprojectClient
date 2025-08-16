@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateLoginStatus } from '../../globalstate/login/LoginSlice';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -16,17 +19,22 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage('');
-    try {
-      const res = await axios.post('http://localhost:3000/api/user/login', formData, { withCredentials: true });
-      localStorage.setItem('token', res.data.token);
-      setMessage('Login successful! ');
-      navigate('/');
-    } catch (err) {
-      setMessage('Login failed');
-    }
-  };
+  e.preventDefault();
+  setMessage('');
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_DOMAIN}/api/user/login`,
+      formData,
+      { withCredentials: true }
+    );
+
+    console.log(res);
+    dispatch(updateLoginStatus(true));
+    navigate('/');
+  } catch (err) {
+    setMessage(err.response?.data?.message || "Login failed");
+  }
+};
 
   return (
 <div style={{ minHeight: '100vh' }} className="d-flex justify-content-center align-items-center">

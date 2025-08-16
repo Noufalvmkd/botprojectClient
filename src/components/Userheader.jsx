@@ -1,10 +1,14 @@
 import React from 'react';
 import { Container, Nav, Navbar, Button, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 
 const Userheader = () => {
+
   // TODO: Replace these with real auth/cart context later
-  const isLoggedIn = false; // mock login state
+  const isLoggedIn = useSelector((state) => state.isLoggedin.value)
+  console.log(isLoggedIn)
   const userName = "Noufal"; // mock user
   const cartItemCount = 3;   // mock cart items
 
@@ -22,6 +26,26 @@ const Userheader = () => {
           <Nav.Link as={Link} to="/">Home</Nav.Link>
           <Nav.Link as={Link} to="/products">Products</Nav.Link>
           <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
+          {/* {isLoggedIn ? (
+  <Nav.Item>
+    <Link to="/profile">
+      <Image
+        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+        roundedCircle
+        width="40"
+        height="40"
+        alt="User Avatar"
+        style={{ objectFit: "cover" }}
+      />
+    </Link>
+  </Nav.Item>
+) : (
+  <Nav.Item>
+    <Link to="/login" className="nav-link">
+      Login
+    </Link>
+  </Nav.Item>
+)} */}
         </Nav>
 
         <form className="d-flex me-3">
