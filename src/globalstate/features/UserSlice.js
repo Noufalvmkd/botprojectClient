@@ -4,7 +4,7 @@ const initialState ={
   isUserAuth : false,
   userData :{},
 }
-const userSlice = createSlice({
+const UserSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -21,4 +21,4 @@ const userSlice = createSlice({
 
 export const { saveUser , clearUser  } = userSlice.actions
 
-export default userSlice.reducer
+export default UserSlice.reducer
