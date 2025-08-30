@@ -1,6 +1,7 @@
-import { StrictMode } from 'react'
+import { Profiler, StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 import App from './App.jsx'
 import Home from './pages/user/Home.jsx'
 import { store } from './globalstate/Store.js';
@@ -18,11 +19,18 @@ import Userroot from './layouts/Userroot.jsx';
 import AdminRoot from './layouts/AdminRoot.jsx';
 import Register from './pages/shared/Register.jsx';
 import Login from './pages/shared/Login.jsx';
+import ErrorPage from './pages/shared/ErrorPage.jsx';
+import AdminPage from './pages/admin/AdminPage.jsx';
+import Products from './pages/user/Products.jsx';
+import ProductDetails from './pages/user/ProductDetails.jsx';
+import Profile from './pages/user/Profile.jsx';
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Userroot />,
+    errorElement: <ErrorPage />,
     children : [
       {path: "",
     element: <Home />} ,
@@ -34,14 +42,46 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   }
+  ,
+   {
+    path: "/products",
+    element: <Products />,
+  }
+  ,
+   {
+    path: "/productDetails/:productId",
+    element: <ProductDetails />,
+  },
+  {
+    element: <ProtectedRoute />,
+    path: "user",
+    children : [
+            {
+              path:"wishlist",
+              element:""
+            },
+            {
+              path: "profile",
+              element: <Profile />
+            },
+            {path: "cart",
+              element:""
+            }
+    ]
+  }
+  
     ]
   },
-  {path: "/admin",
+  {path: "admin",
   element: <AdminRoot />,
+  errorElement: <ErrorPage role={"admin"} />,
   children : [
-    // {path :"add-movie",
-    //   element :<AddMovie />
-    //   }
+    {path :"login",
+      element :<Login role="admin" />
+      },
+      //  {path :"login",
+      // element :<Login role="admin" />
+      // }
     ]
   
   },

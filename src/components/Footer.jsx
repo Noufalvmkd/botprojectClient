@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -20,6 +21,7 @@ const Footer = () => {
               <li><a href="/products" className="text-light text-decoration-none">Products</a></li>
               <li><a href="/cart" className="text-light text-decoration-none">Cart</a></li>
               <li><a href="/contact" className="text-light text-decoration-none">Contact</a></li>
+            <Link className="text-light text-decoration-none" to={"admin/login"}>Login as Admin</Link>
             </ul>
           </Col>
 

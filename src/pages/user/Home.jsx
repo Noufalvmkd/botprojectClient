@@ -3,6 +3,7 @@ import axios from 'axios';
 import ProductCard from '../../components/ProductCards';
 import { Container, Row, Col } from 'react-bootstrap';
 import CarouselComponent from '../../components/user/CarouselComponent';
+import Products from './Products';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -25,15 +26,15 @@ const Home = () => {
     <>
     <div style={{ paddingTop: "70px" }}>
     <CarouselComponent />
-   
+   <Products />
     <Container className="my-4">
       <h2 className="mb-4">Featured Products</h2>
       <Row>
-        {products.map((product) => (
+        {/* {products.map((product) => (
           <Col key={product.id} xs = {12} xm ={6} md= {4} lg= {4} xl = {3}>
             <ProductCard product={product} />
           </Col>
-        ))}
+        ))} */}
       </Row>
     </Container>
     </div>
