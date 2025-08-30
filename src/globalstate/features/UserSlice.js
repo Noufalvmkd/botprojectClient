@@ -19,6 +19,6 @@ const UserSlice = createSlice({
   },
 })
 
-export const { saveUser , clearUser  } = userSlice.actions
+export const { saveUser , clearUser  } = UserSlice.actions
 
 export default UserSlice.reducer
