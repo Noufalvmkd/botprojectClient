@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { saveUser , clearUser } from '../../globalstate/features/userSlice';
+import { saveUser , clearUser } from '../../globalstate/features/UserSlice';
 import { useForm } from 'react-hook-form';
 import axiosinstance from '../../config/axiosinstance';
 
