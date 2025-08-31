@@ -9,11 +9,11 @@ const UserSlice = createSlice({
   initialState,
   reducers: {
     saveUser: (state, action) => {
-        state.isUserAuth = true;
-        state.userData = action.payload;
+        state.isUserAuth = !!action.payload;
+        state.userData = action.payload || {};
     },
     clearUser: (state)=>{
-      state.isUserAuth =false,
+      state.isUserAuth =false;
       state.userData ={};
     }
   },

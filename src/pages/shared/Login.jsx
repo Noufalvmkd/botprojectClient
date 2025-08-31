@@ -2,11 +2,11 @@ import React from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { saveUser , clearUser } from '../../globalstate/features/UserSlice';
+import { saveUser } from '../../globalstate/features/UserSlice';
 import { useForm } from 'react-hook-form';
 import axiosinstance from '../../config/axiosinstance';
 
-const Login = ({role}) => {
+const Login = ({ role }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [message, setMessage] = React.useState('');
@@ -18,35 +18,42 @@ const Login = ({role}) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  // Determine role, API endpoint, and profile route
   const user = {
-    role: "user",
-    loginApi : "/user/login",
-    profileRoute : "/user/profile",
-
+    role: 'user',
+    loginApi: '/user/login',
+    profileRoute: '/user/profile',
   };
 
-  if(role =="admin"){
-    user.role= "admin",
-    user.loginApi ="/admin/login",
-    user.profileRoute ="/admin/profile"
+  if (role === 'admin') {
+    user.role = 'admin';
+    user.loginApi = '/admin/login';
+    user.profileRoute = '/admin/profile';
   }
 
   const onSubmit = async (data) => {
     setMessage('');
+
     try {
       const res = await axiosinstance({
-        method:"POST",
-        url:user.loginApi,
-        data: data,
-      }
-  
-      );
+        method: 'POST',
+        url: user.loginApi,
+        data,
+        withCredentials: true, // crucial for cookies
+      });
 
-      console.log(res);
-      dispatch(saveUser(res?.data?.data));
+      // If backend sends token and data separately, fetch user info next
+      const checkUserRes = await axiosinstance.get('/user/check-user', {
+        withCredentials: true,
+      });
+
+      // Save user in Redux
+      dispatch(saveUser(checkUserRes?.data?.data));
+
+      // Navigate to profile
       navigate(user.profileRoute);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Login failed");
+      setMessage(err.response?.data?.message || 'Login failed');
     }
   };
 
@@ -58,14 +65,14 @@ const Login = ({role}) => {
             <h3 className="text-center mb-4">Login! {user.role}</h3>
             {message && <Alert variant="danger">{message}</Alert>}
 
-            {/* RHF form */}
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Enter email"
-                  {...register("email", { required: "Email is required" })}
+                  {...register('email', { required: 'Email is required' })}
+                  autoComplete="email"
                 />
                 {errors.email && <small className="text-danger">{errors.email.message}</small>}
               </Form.Group>
@@ -75,13 +82,14 @@ const Login = ({role}) => {
                 <Form.Control
                   type="password"
                   placeholder="Password"
-                  {...register("password", { required: "Password is required" })}
+                  {...register('password', { required: 'Password is required' })}
+                  autoComplete="current-password"
                 />
                 {errors.password && <small className="text-danger">{errors.password.message}</small>}
               </Form.Group>
 
               <Button variant="success" type="submit" className="w-100 mb-3" disabled={isSubmitting}>
-                {isSubmitting ? "Logging in..." : "Login"}
+                {isSubmitting ? 'Logging in...' : 'Login'}
               </Button>
 
               <div className="text-center">
@@ -96,6 +104,7 @@ const Login = ({role}) => {
 };
 
 export default Login;
+
 
 
 
