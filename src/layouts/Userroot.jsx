@@ -30,8 +30,10 @@ const Userroot = () => {
       // Clear Redux user data
       dispatch(clearUser());
 
-      // Redirect to login page
-      navigate('/login');
+      // Only redirect if user is trying to access protected route
+      if (location.pathname.startsWith('/user')) {
+        navigate('/login');
+      }
     } finally {
       setCheckingUser(false); // stop loading
     }
@@ -65,6 +67,7 @@ const Userroot = () => {
 };
 
 export default Userroot;
+
 
 
 
