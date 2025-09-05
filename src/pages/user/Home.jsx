@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     getProduct();
   }, []);
-
+console.log("API Domain =>", import.meta.env.VITE_API_DOMAIN);
   return (
     <>
     <div style={{ paddingTop: "70px" }}>

@@ -25,6 +25,8 @@ import Products from './pages/user/Products.jsx';
 import ProductDetails from './pages/user/ProductDetails.jsx';
 import Profile from './pages/user/Profile.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
+import ProtectedRouterAdmin from './routes/ProtectedRouterAdmin.jsx';
+import AddProduct from './pages/admin/AddProduct.jsx';
 
 const router = createBrowserRouter([
   {
@@ -79,9 +81,25 @@ const router = createBrowserRouter([
     {path :"login",
       element :<Login role="admin" />
       },
-      //  {path :"login",
-      // element :<Login role="admin" />
-      // }
+       {
+        element: <ProtectedRouterAdmin />,
+        children:[
+          {
+            path:"dashboard"
+          },
+          {
+            path:"profile",
+            element: <h1>admin profile page</h1>
+          },
+          {
+            path: "all-products",
+          },
+          {
+            path: "add-product",
+            element: <AddProduct />
+          }
+        ] 
+      }
     ]
   
   },

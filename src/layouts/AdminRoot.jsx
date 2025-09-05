@@ -6,7 +6,7 @@ import AdminHeader from '../components/admin/AdminHeader'
 import Footer from '../components/Footer'
 
 const AdminRoot = () => {
-   const isUserAuth = false;
+   const isUserAuth = true;
   return (
     <>
    <div className="layout">
