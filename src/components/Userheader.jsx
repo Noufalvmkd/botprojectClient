@@ -12,7 +12,8 @@ const Userheader = () => {
   const isLoggedIn = useSelector((state) => state.user.isUserAuth);
   const userData = useSelector((state) => state.user.userData);
 
-  const cartItemCount = 3; // mock for now
+  const cartItemCount = 3;   // mock for now
+  const wishlistCount = 2;   // mock for now
 
   const handleLogout = () => {
     dispatch(clearUser()); // clear redux state
@@ -36,11 +37,33 @@ const Userheader = () => {
         </form>
 
         <Nav className="align-items-center">
-          <Nav.Link as={Link} to="/cart" className="position-relative">
+
+          {/* Wishlist */}
+          <Nav.Link
+            as={Link}
+            to={isLoggedIn ? "/wishlist" : "/login"}
+            className="position-relative"
+          >
+            ❤️ Wishlist
+            {isLoggedIn && (
+              <Badge bg="info" pill className="position-absolute top-0 start-100 translate-middle">
+                {wishlistCount}
+              </Badge>
+            )}
+          </Nav.Link>
+
+          {/* Cart */}
+          <Nav.Link
+            as={Link}
+            to={isLoggedIn ? "/cart" : "/login"}
+            className="position-relative"
+          >
             🛒 Cart
-            <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
-              {cartItemCount}
-            </Badge>
+            {isLoggedIn && (
+              <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
+                {cartItemCount}
+              </Badge>
+            )}
           </Nav.Link>
 
           {isLoggedIn ? (
@@ -64,29 +87,3 @@ const Userheader = () => {
 };
 
 export default Userheader;
-
-
-
-
-
-
-       {/* {isLoggedIn ? (
-  <Nav.Item>
-    <Link to="/profile">
-      <Image
-        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-        roundedCircle
-        width="40"
-        height="40"
-        alt="User Avatar"
-        style={{ objectFit: "cover" }}
-      />
-    </Link>
-  </Nav.Item>
-) : (
-  <Nav.Item>
-    <Link to="/login" className="nav-link">
-      Login
-    </Link>
-  </Nav.Item>
-)} */}

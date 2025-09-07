@@ -1,9 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBag, Heart, User } from "lucide-react";
 import { Navbar, Nav, Container, Badge, Dropdown } from "react-bootstrap";
+import axiosinstance from "../../config/axiosinstance";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../globalstate/features/UserSlice"; // 👈 adjust path if needed
 
 const UserLoggedHeader = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axiosinstance.put("/user/logout", {}, { withCredentials: true });
+
+      // clear redux user state
+      dispatch(clearUser());
+
+      // navigate to home
+      navigate("/");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm fixed-top">
       <Container>
@@ -49,7 +69,7 @@ const UserLoggedHeader = () => {
                 <Dropdown.Item as={Link} to="/user/profile">My Profile</Dropdown.Item>
                 <Dropdown.Item as={Link} to="/user/settings">Settings</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item as={Link} to="/logout" className="text-danger">
+                <Dropdown.Item onClick={handleLogout} className="text-danger">
                   Logout
                 </Dropdown.Item>
               </Dropdown.Menu>

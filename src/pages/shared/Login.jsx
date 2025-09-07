@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { saveUser } from '../../globalstate/features/UserSlice';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import axiosinstance from '../../config/axiosinstance';
 const Login = ({ role }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [message, setMessage] = React.useState('');
 
   // React Hook Form setup
@@ -18,17 +19,16 @@ const Login = ({ role }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  // Determine role, API endpoint, and profile route
+  // Default user settings
   const user = {
     role: 'user',
     loginApi: '/user/login',
-    profileRoute: '/user/profile',
   };
 
+  // Override if admin
   if (role === 'admin') {
     user.role = 'admin';
     user.loginApi = '/admin/login';
-    user.profileRoute = '/admin/profile';
   }
 
   const onSubmit = async (data) => {
@@ -42,7 +42,7 @@ const Login = ({ role }) => {
         withCredentials: true, // crucial for cookies
       });
 
-      // If backend sends token and data separately, fetch user info next
+      // Fetch logged user info after login
       const checkUserRes = await axiosinstance.get('/user/check-user', {
         withCredentials: true,
       });
@@ -50,8 +50,18 @@ const Login = ({ role }) => {
       // Save user in Redux
       dispatch(saveUser(checkUserRes?.data?.data));
 
-      // Navigate to profile
-      navigate(user.profileRoute);
+      // ✅ Decide where to redirect
+      let redirectTo;
+      if (user.role === "admin") {
+        // Admin → dashboard
+        redirectTo = location.state?.from || "/admin/dashboard";
+      } else {
+        // User → homepage (or back to previous page like product/cart)
+        redirectTo = location.state?.from || "/";
+      }
+
+      navigate(redirectTo, { replace: true });
+
     } catch (err) {
       setMessage(err.response?.data?.message || 'Login failed');
     }
@@ -104,96 +114,3 @@ const Login = ({ role }) => {
 };
 
 export default Login;
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-// import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
-// import axios from 'axios';
-// import { useNavigate, Link } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
-// import { updateLoginStatus } from '../../globalstate/login/LoginSlice';
-
-// const Login = () => {
-//   const dispatch = useDispatch();
-//   const [formData, setFormData] = useState({ email: '', password: '' });
-//   const [message, setMessage] = useState('');
-//   const navigate = useNavigate();
-
-//   const handleChange = (e) => {
-//     setFormData((prev) => ({
-//       ...prev,
-//       [e.target.name]: e.target.value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setMessage('');
-//   try {
-//     const res = await axios.post(
-//       `${import.meta.env.VITE_API_DOMAIN}/api/user/login`,
-//       formData,
-//       { withCredentials: true }
-//     );
-
-//     console.log(res);
-//     dispatch(updateLoginStatus(true));
-//     navigate('/');
-//   } catch (err) {
-//     setMessage(err.response?.data?.message || "Login failed");
-//   }
-// };
-
-//   return (
-// <div style={{ minHeight: '100vh' }} className="d-flex justify-content-center align-items-center">
-//       <Container>
-//         <Row className="justify-content-center">
-//           <Col xs={12} md={6} lg={4}>
-//             <h3 className="text-center mb-4">Login</h3>
-//             {message && <Alert variant="danger">{message}</Alert>}
-//             <Form onSubmit={handleSubmit}>
-//               <Form.Group className="mb-3">
-//                 <Form.Label>Email address</Form.Label>
-//                 <Form.Control
-//                   type="email"
-//                   name="email"
-//                   value={formData.email}
-//                   onChange={handleChange}
-//                   placeholder="Enter email"
-//                   required
-//                 />
-//               </Form.Group>
-
-//               <Form.Group className="mb-4">
-//                 <Form.Label>Password</Form.Label>
-//                 <Form.Control
-//                   type="password"
-//                   name="password"
-//                   value={formData.password}
-//                   onChange={handleChange}
-//                   placeholder="Password"
-//                   required
-//                 />
-//               </Form.Group>
-
-//               <Button variant="success" type="submit" className="w-100 mb-3">
-//                 Login
-//               </Button>
-
-//               <div className="text-center">
-//                 Don't have an account? <Link to="/register">Register here</Link>
-//               </div>
-//             </Form>
-//           </Col>
-//         </Row>
-//       </Container>
-//     </div>
-//   );
-// };
-
-// export default Login;
