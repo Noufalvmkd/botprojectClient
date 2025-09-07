@@ -27,6 +27,7 @@ import Profile from './pages/user/Profile.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import ProtectedRouterAdmin from './routes/ProtectedRouterAdmin.jsx';
 import AddProduct from './pages/admin/AddProduct.jsx';
+import Cart from './pages/user/Cart.jsx';
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,7 @@ const router = createBrowserRouter([
               element: <Profile />
             },
             {path: "cart",
-              element:""
+              element:<Cart />
             }
     ]
   }

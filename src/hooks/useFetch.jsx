@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axiosinstance from "../config/axiosinstance";
 
 
-const useFetch =(url)=>{
+const useFetch =(url , refresh)=>{
    const [data, setData]=useState();
    const [isLoading,setIsLoading]=useState(true);
    const [error , setError]=useState(null)
@@ -27,7 +27,7 @@ const useFetch =(url)=>{
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refresh]);
   return [data,isLoading,error];
 }
 

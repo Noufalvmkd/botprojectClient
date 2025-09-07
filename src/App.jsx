@@ -1,11 +1,12 @@
-
-
-
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  
-
-  return null;
+  return (
+    <>
+     
+      <Toaster position="top-right" reverseOrder={false} />
+    </>
+  );
 }
 
-export default App
+export default App;
