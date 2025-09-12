@@ -26,8 +26,9 @@ import ProductDetails from './pages/user/ProductDetails.jsx';
 import Profile from './pages/user/Profile.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import ProtectedRouterAdmin from './routes/ProtectedRouterAdmin.jsx';
-import AddProduct from './pages/admin/AddProduct.jsx';
+import AddProduct from './pages/admin/AdminProducts.jsx';
 import Cart from './pages/user/Cart.jsx';
+import AdminProducts from './pages/admin/AdminProducts.jsx';
 
 const router = createBrowserRouter([
   {
@@ -86,7 +87,8 @@ const router = createBrowserRouter([
         element: <ProtectedRouterAdmin />,
         children:[
           {
-            path:"dashboard"
+            path:"dashboard",
+            element: <AdminPage />
           },
           {
             path:"profile",
@@ -96,8 +98,8 @@ const router = createBrowserRouter([
             path: "all-products",
           },
           {
-            path: "add-product",
-            element: <AddProduct />
+            path: "manage-product",
+            element: <AdminProducts />
           }
         ] 
       }

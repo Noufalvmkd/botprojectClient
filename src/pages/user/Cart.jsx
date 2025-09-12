@@ -4,10 +4,37 @@ import useFetch from "../../hooks/useFetch";
 import CartCards from "../../components/CartCards";
 import axiosinstance from "../../config/axiosinstance";
 import toast from "react-hot-toast";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Cart = () => {
   const [refreshState , setRefreshState]= useState(false)
   const [cartDetails, isLoading, error] = useFetch("/cart/get-cart" , refreshState);
+
+  // stripe
+const makePayment = async () => {
+  try {
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+    // Send all cart products to backend
+    const session = await axiosinstance({
+      url: "/payment/create-checkout-session",
+      method: "POST",
+      data: { products: cartDetails.products },  // ✅ send full cart products
+    });
+
+    console.log(session.data, "=== session");
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.data.sessionId,
+    });
+
+    if (result.error) {
+      console.error(result.error.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const handleRemove = async (productId) => {
     try {
@@ -68,6 +95,7 @@ const Cart = () => {
       <Row className="mt-4">
         <Col className="text-end">
           <h4>Total: ${cartDetails.totalPrice?.toFixed(2)}</h4>
+          <button className="btn btn-success" onClick={makePayment}>Make Payment</button>
         </Col>
       </Row>
     </Container>

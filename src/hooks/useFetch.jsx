@@ -16,7 +16,7 @@ const useFetch =(url , refresh)=>{
       console.log("API Response:", response.data);
 
 
-      // Adjust based on what your backend sends
+      // Adjust based on what  backend sends
       setData(response.data);
       setIsLoading(false);
     } catch (error) {

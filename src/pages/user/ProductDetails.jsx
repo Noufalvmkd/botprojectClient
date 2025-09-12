@@ -74,7 +74,7 @@ const ProductDetails = () => {
                     {productDetails?.description}
                   </p>
                   <h4 className="text-success fw-bold">
-                    ${productDetails?.price}
+                    ₹{productDetails?.price}
                   </h4>
                   <p className="mb-1">
                     <strong>Rating:</strong> ⭐ {productDetails?.rating}

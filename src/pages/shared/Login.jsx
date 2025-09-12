@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { saveUser } from '../../globalstate/features/UserSlice';
+import { saveAdmin, clearAdmin } from '../../globalstate/features/AdminSlice';
 import { useForm } from 'react-hook-form';
 import axiosinstance from '../../config/axiosinstance';
 
@@ -10,7 +11,9 @@ const Login = ({ role }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [message, setMessage] = React.useState('');
+  const { isAdminAuth } = useSelector((state) => state.admin); // get admin auth from Redux
+  const [checkingAdmin, setCheckingAdmin] = useState(role === "admin"); // only check for admin
+  const [message, setMessage] = useState('');
 
   // React Hook Form setup
   const {
@@ -31,41 +34,96 @@ const Login = ({ role }) => {
     user.loginApi = '/admin/login';
   }
 
+  // Check if admin already logged in on mount
+  useEffect(() => {
+    if (role === 'admin') {
+      const checkAdmin = async () => {
+        try {
+          const res = await axiosinstance.get('/admin/check-admin', { withCredentials: true });
+          dispatch(saveAdmin(res.data.data)); // save admin info in Redux
+        } catch (err) {
+          console.error('Admin not authorized', err);
+          dispatch(clearAdmin()); // clear Redux if invalid
+        } finally {
+          setCheckingAdmin(false);
+        }
+      };
+      checkAdmin();
+    } else {
+      setCheckingAdmin(false);
+    }
+  }, [role, dispatch]);
+
+  // Redirect if admin is already logged in
+  useEffect(() => {
+    if (!checkingAdmin && role === 'admin' && isAdminAuth) {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [checkingAdmin, isAdminAuth, role, navigate]);
+
   const onSubmit = async (data) => {
     setMessage('');
 
     try {
-      const res = await axiosinstance({
-        method: 'POST',
-        url: user.loginApi,
-        data,
-        withCredentials: true, // crucial for cookies
-      });
-
-      // Fetch logged user info after login
-      const checkUserRes = await axiosinstance.get('/user/check-user', {
+      // 1) call role-specific login endpoint
+      const res = await axiosinstance.post(user.loginApi, data, {
         withCredentials: true,
       });
+      console.log('login response:', res.data);
 
-      // Save user in Redux
-      dispatch(saveUser(checkUserRes?.data?.data));
+      // 2) try to get profile directly from login response (if backend returns it)
+      let profile = res?.data?.data || res?.data;
 
-      // ✅ Decide where to redirect
-      let redirectTo;
-      if (user.role === "admin") {
-        // Admin → dashboard
-        redirectTo = location.state?.from || "/admin/dashboard";
-      } else {
-        // User → homepage (or back to previous page like product/cart)
-        redirectTo = location.state?.from || "/";
+      // 3) if profile not returned in login response, call role-specific check endpoint
+      if (!profile || !profile.role) {
+        const checkUrl = user.role === 'admin' ? '/admin/check-admin' : '/user/check-user';
+        console.log('calling check endpoint:', checkUrl);
+        const checkRes = await axiosinstance.get(checkUrl, { withCredentials: true });
+        console.log('check endpoint response:', checkRes.data);
+        profile = checkRes?.data?.data || checkRes?.data;
       }
 
+      // 4) defensive checks
+      if (!profile) {
+        setMessage('Login succeeded but could not verify profile. Try again.');
+        return;
+      }
+
+      if (user.role === 'admin' && profile.role !== 'admin') {
+        setMessage('This account is not an admin.');
+        return;
+      }
+
+      // 5) dispatch to correct slice
+      if (user.role === 'admin') {
+        dispatch(saveAdmin(profile));
+      } else {
+        dispatch(saveUser(profile));
+      }
+
+      // 6) redirect
+      const redirectTo = user.role === 'admin'
+        ? (location.state?.from || '/admin/dashboard')
+        : (location.state?.from || '/');
       navigate(redirectTo, { replace: true });
 
     } catch (err) {
+      console.error('Login error:', err);
       setMessage(err.response?.data?.message || 'Login failed');
     }
   };
+
+  // Show loader while checking admin
+  if (checkingAdmin) {
+    return (
+      <div
+        style={{ minHeight: '100vh' }}
+        className="d-flex justify-content-center align-items-center"
+      >
+        <div>Checking admin authentication...</div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh' }} className="d-flex justify-content-center align-items-center">

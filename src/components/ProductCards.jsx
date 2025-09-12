@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
       <Card.Body>
         <Card.Title>{product.name}</Card.Title>
         <Card.Text>
-          <strong>${product.price}</strong><br />
+          <strong>₹{product.price}</strong><br />
           <small>{product.description}</small><br />
           <span style={{ color: '#888' }}>
   ⭐ {product.rating?.rate || 0} ({product.rating?.count || 0} reviews)

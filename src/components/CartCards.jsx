@@ -21,7 +21,7 @@ const CartCards = ({ item, handleRemove  }) => {
         <Card.Text>{product?.description || "No description available"}</Card.Text>
 
         <Card.Text>
-          <strong>Unit Price:</strong> ${item.price}
+          <strong>Unit Price:</strong> ₹{item.price}
         </Card.Text>
         <Card.Text>
           <strong>Quantity:</strong> {item.quantity}

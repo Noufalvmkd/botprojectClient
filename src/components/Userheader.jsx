@@ -12,8 +12,8 @@ const Userheader = () => {
   const isLoggedIn = useSelector((state) => state.user.isUserAuth);
   const userData = useSelector((state) => state.user.userData);
 
-  const cartItemCount = 3;   // mock for now
-  const wishlistCount = 2;   // mock for now
+  // const cartItemCount = 3;   // mock for now
+  // const wishlistCount = 2;   // mock for now
 
   const handleLogout = () => {
     dispatch(clearUser()); // clear redux state
