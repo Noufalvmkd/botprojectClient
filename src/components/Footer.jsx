@@ -1,10 +1,14 @@
 // src/components/Footer.jsx
 
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";  
 
 const Footer = () => {
+  // 👇 Get admin state from Redux
+  const isAdminAuth = useSelector((state) => state.admin.isAdminAuth);
+
   return (
     <footer className="bg-dark text-light py-4 mt-5">
       <Container>
@@ -17,11 +21,27 @@ const Footer = () => {
           <Col md={4} className="mb-3">
             <h6>Quick Links</h6>
             <ul className="list-unstyled">
-              <li><a href="/" className="text-light text-decoration-none">Home</a></li>
-              <li><a href="/products" className="text-light text-decoration-none">Products</a></li>
-              <li><a href="/cart" className="text-light text-decoration-none">Cart</a></li>
-              <li><a href="/contact" className="text-light text-decoration-none">Contact</a></li>
-            <Link className="text-light text-decoration-none" to={"admin/login"}>Login as Admin</Link>
+              <li>
+                <a href="/" className="text-light text-decoration-none">Home</a>
+              </li>
+              <li>
+                <a href="/products" className="text-light text-decoration-none">Products</a>
+              </li>
+              <li>
+                <a href="/cart" className="text-light text-decoration-none">Cart</a>
+              </li>
+              <li>
+                <a href="/contact" className="text-light text-decoration-none">Contact</a>
+              </li>
+
+              {/* 👇 Show "Login as Admin" only when not logged */}
+              {!isAdminAuth && (
+                <li>
+                  <Link className="text-light text-decoration-none" to="/admin/login">
+                    Login as Admin
+                  </Link>
+                </li>
+              )}
             </ul>
           </Col>
 

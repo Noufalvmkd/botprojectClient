@@ -5,7 +5,7 @@ const ErrorPage = ({role = "user"}) => {
     const navigate = useNavigate();
     let home_route = "/";
     if(role=="admin"){
-      home_route ="/admin";
+      home_route ="/admin/dashboard";
     }
   return (
     <div>

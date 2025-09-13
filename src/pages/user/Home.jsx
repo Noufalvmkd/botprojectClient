@@ -26,17 +26,17 @@ const Home = () => {
   //   getProduct();
   // }, []);
 
-  const handleAdminLoginClick = () => {
-    if (isAdminAuth) {
-      // If admin already logged in, go to dashboard
-      navigate('/admin/dashboard', { replace: true });
-    } else {
-      // Otherwise go to admin login page
-      navigate('/admin/login');
-    }
-  };
+  // const handleAdminLoginClick = () => {
+  //   if (isAdminAuth) {
+  //     // If admin already logged in, go to dashboard
+  //     navigate('/admin/dashboard', { replace: true });
+  //   } else {
+  //     // Otherwise go to admin login page
+  //     navigate('/admin/login');
+  //   }
+  // };
 
-  console.log("API Domain =>", import.meta.env.VITE_API_DOMAIN);
+  // console.log("API Domain =>", import.meta.env.VITE_API_DOMAIN);
 
   return (
     <>
@@ -44,11 +44,11 @@ const Home = () => {
         <CarouselComponent />
 
         {/* Add Admin Login Button */}
-        <Container className="my-4 text-center">
+        {/* <Container className="my-4 text-center">
           <Button variant="primary" onClick={handleAdminLoginClick}>
             Login as Admin
           </Button>
-        </Container>
+        </Container> */}
 
         <Products />
 

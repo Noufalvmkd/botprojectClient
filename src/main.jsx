@@ -95,6 +95,10 @@ const router = createBrowserRouter([
             element: <h1>admin profile page</h1>
           },
           {
+            path: "admin-about",
+            element:<h1>admin about page</h1>
+          },
+          {
             path: "all-products",
           },
           {
