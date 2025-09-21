@@ -29,6 +29,8 @@ import ProtectedRouterAdmin from './routes/ProtectedRouterAdmin.jsx';
 import AddProduct from './pages/admin/AdminProducts.jsx';
 import Cart from './pages/user/Cart.jsx';
 import AdminProducts from './pages/admin/AdminProducts.jsx';
+import Checkout from './pages/user/Checkout.jsx';
+import Myorders from './pages/user/Myorders.jsx'
 
 const router = createBrowserRouter([
   {
@@ -70,6 +72,14 @@ const router = createBrowserRouter([
             },
             {path: "cart",
               element:<Cart />
+            },
+            {
+              path:"checkout",
+              element : <Checkout />
+            },
+            {
+              path:"my-orders",
+              element: <Myorders />
             }
     ]
   }

@@ -4,53 +4,28 @@ import useFetch from "../../hooks/useFetch";
 import CartCards from "../../components/CartCards";
 import axiosinstance from "../../config/axiosinstance";
 import toast from "react-hot-toast";
-import { loadStripe } from "@stripe/stripe-js";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const [refreshState , setRefreshState]= useState(false)
-  const [cartDetails, isLoading, error] = useFetch("/cart/get-cart" , refreshState);
-
-  // stripe
-const makePayment = async () => {
-  try {
-    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
-    // Send all cart products to backend
-    const session = await axiosinstance({
-      url: "/payment/create-checkout-session",
-      method: "POST",
-      data: { products: cartDetails.products },  // ✅ send full cart products
-    });
-
-    console.log(session.data, "=== session");
-
-    const result = await stripe.redirectToCheckout({
-      sessionId: session.data.sessionId,
-    });
-
-    if (result.error) {
-      console.error(result.error.message);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const navigate = useNavigate();
+  const [refreshState, setRefreshState] = useState(false);
+  const [cartDetails, isLoading, error] = useFetch("/cart/get-cart", refreshState);
 
   const handleRemove = async (productId) => {
     try {
       console.log("Remove product with id:", productId);
-    const response = await axiosinstance ({
-      method: "DELETE",
-      url: `/cart/remove/${productId}`,
-      data: {productId}
-    })
-    toast.success("item removed");
-    setRefreshState((prev)=> !prev);
+      await axiosinstance({
+        method: "DELETE",
+        url: `/cart/remove/${productId}`,
+        data: { productId },
+      });
+      toast.success("item removed");
+      setRefreshState((prev) => !prev);
     } catch (error) {
-      console.log(error)
-      toast.error(error?.response?.data?.message || "failed to remove")
+      console.log(error);
+      toast.error(error?.response?.data?.message || "failed to remove");
     }
-    
   };
 
   if (isLoading) {
@@ -91,11 +66,15 @@ const makePayment = async () => {
         ))}
       </Row>
 
-      {/* Cart Total */}
+      {/* Cart Total with Checkout Button */}
       <Row className="mt-4">
         <Col className="text-end">
-          <h4>Total: ${cartDetails.totalPrice?.toFixed(2)}</h4>
-          <button className="btn btn-success" onClick={makePayment}>Make Payment</button>
+          <h4>Total: ₹{cartDetails.totalPrice?.toFixed(2)}</h4>
+
+          {/* Only Checkout Page button now */}
+          <button className="btn btn-primary" onClick={() => navigate("/user/checkout")}>
+      Proceed to Checkout
+    </button>
         </Col>
       </Row>
     </Container>
@@ -103,3 +82,5 @@ const makePayment = async () => {
 };
 
 export default Cart;
+
+ 

@@ -49,7 +49,7 @@ const Footer = () => {
             <h6>Contact</h6>
             <p>Email: support@myzone.com</p>
             <p>Phone: +971 123 456 789</p>
-            <p>Location: Abu Dhabi, UAE</p>
+            <p>Location: KERALA, INDIA</p>
           </Col>
         </Row>
 

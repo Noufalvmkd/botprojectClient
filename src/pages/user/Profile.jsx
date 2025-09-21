@@ -1,8 +1,10 @@
 import React from "react";
 import useFetch from "../../hooks/useFetch";
 import axiosinstance from "../../config/axiosinstance";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [profileData, isLoading, error] = useFetch("/user/profile");
 
   const handleLogout = async () => {
@@ -22,7 +24,7 @@ const Profile = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex gap-2 mb-4">
-        <button className="btn btn-primary">Orders</button>
+        <button className="btn btn-primary" onClick={()=> navigate("/user/my-orders")} >Orders</button>
         <button className="btn btn-danger" onClick={handleLogout}>
           Logout
         </button>
