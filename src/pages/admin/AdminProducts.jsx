@@ -103,7 +103,7 @@ const AdminProducts = () => {
 
   return (
     <Container className="my-5">
-      <h2>Admin Products</h2>
+      <h2 className="pt-3">Admin Products</h2>
       <Button variant="primary" className="mb-3" onClick={handleAdd}>
         Add Product
       </Button>

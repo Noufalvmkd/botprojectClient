@@ -37,6 +37,7 @@ const AdminHeader = () => {
           <Nav className="me-auto fw-semibold">
             <Nav.Link as={Link} to="/admin/dashboard">Home</Nav.Link>
             <Nav.Link as={Link} to="/admin/manage-product">Manage products</Nav.Link>
+            <Nav.Link as={Link} to="/admin/manage-orders">Manage orders</Nav.Link>
           </Nav>
 
           <Nav className="ms-auto align-items-center gap-3">
