@@ -74,7 +74,7 @@ const placeOrder = async () => {
       const cartRes = await axiosinstance.get("/cart/get-cart");
 
       // 2. Create checkout session
-      const session = await axiosinstance.post("/payment/create-checkout-session", {
+      const session = await axiosinstance.post("/payment/createpayment", {
         products: cartRes.data.products,
       });
 

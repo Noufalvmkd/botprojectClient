@@ -32,6 +32,7 @@ import AdminProducts from './pages/admin/AdminProducts.jsx';
 import Checkout from './pages/user/Checkout.jsx';
 import Myorders from './pages/user/Myorders.jsx'
 import AdminOrders from './pages/admin/AdminOrders.jsx';
+import AdminUsers from './pages/admin/AdminUsers.jsx';
 
 const router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
           {
             path: "manage-orders",
             element: <AdminOrders />
+          },
+          {
+            path: "manage-users",
+            element: <AdminUsers />
           }
         ] 
       }
