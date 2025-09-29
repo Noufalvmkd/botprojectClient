@@ -17,24 +17,20 @@ const AdminUsers = () => {
   };
 
   // Toggle user active/inactive
-  const toggleStatus = async (id, isActive) => {
-    try {
-      const res = await axiosinstance.put(`/admin/update-user-status/${id}`, {
-        isActive: !isActive,
-      });
+ const toggleStatus = async (id, currentStatus) => {
+  try {
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
 
-      toast.success(res.data.message);
+    await axiosinstance.put(`/admin/update-user-status/${id}`, { status: newStatus });
 
-      // Update the local state instead of refetching
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === id ? { ...user, isActive: !isActive } : user
-        )
-      );
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to update status");
-    }
-  };
+    toast.success(`User status updated to ${newStatus}`);
+    fetchUsers(); // refresh the list
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to update status");
+  }
+};
+
+
 
   useEffect(() => {
     fetchUsers();
@@ -55,20 +51,19 @@ const AdminUsers = () => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user._id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>{user.isActive ? "Active ✅" : "Inactive ❌"}</td>
-              <td>
-                <Button
-                  variant={user.isActive ? "danger" : "success"}
-                  onClick={() => toggleStatus(user._id, user.isActive)}
-                >
-                  {user.isActive ? "Deactivate" : "Activate"}
-                </Button>
-              </td>
-            </tr>
+  <tr key={user._id}>
+    <td>{user.email}</td>
+    <td>{user.role}</td>
+    <td>{user.status}</td>   {/* ✅ show status */}
+    <td>
+      <Button
+        variant={user.status === "active" ? "danger" : "success"}
+        onClick={() => toggleStatus(user._id, user.status)}
+      >
+        {user.status === "active" ? "Deactivate" : "Activate"}
+      </Button>
+    </td>
+  </tr>
           ))}
         </tbody>
       </Table>
