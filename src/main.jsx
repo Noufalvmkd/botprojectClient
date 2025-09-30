@@ -85,11 +85,13 @@ const router = createBrowserRouter([
             },
             {
               path: "payment/success",
-              element: <h2>✅ Payment Successful! Thank you for your order.</h2>
+              element: <h2 style={{ padding: "20px", backgroundColor: "#028802ff", borderRadius: "8px" }}>
+                ✅ Payment Successful! Thank you for your order.</h2>
              },
              {
               path: "payment/cancel",
-              element: <h2>❌ Payment Cancelled. Please try again.</h2>
+              element: <h2 style={{ padding: "20px", backgroundColor: "#e90f33ff", borderRadius: "8px" }}>
+                ❌ Payment Cancelled. Please try again.</h2>
               }
     ]
   }
