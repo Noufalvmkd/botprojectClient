@@ -70,6 +70,8 @@ const placeOrder = async () => {
     try {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
+      localStorage.setItem("shippingInfo", JSON.stringify(shippingInfo));
+
       // 1. Get cart
       const cartRes = await axiosinstance.get("/cart/get-cart");
 
